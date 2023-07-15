@@ -1,3 +1,5 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -23,8 +25,33 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // late final PageManager _pageManager;
+  late final player = AudioPlayer(); // Create a player
+
+  // Future<void> playSong() async {
+  //   final duration =
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // _pageManager = PageManager();
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +98,32 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 100,
-        color: Colors.black26,
-        child: Center(
-          child: IconButton(onPressed: () {}, icon: Icon(Icons.play_arrow)),
+        height: 200,
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            const Spacer(),
+            const ProgressBar(
+              progress: Duration.zero,
+              total: Duration.zero,
+            ),
+            IconButton(
+              icon: const Icon(Icons.play_arrow),
+              iconSize: 32.0,
+              onPressed: () async {
+                await player.setUrl(
+                    'https://thepaciellogroup.github.io/AT-browser-tests/audio/jeffbob.mp3');
+                player.play();
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.play_arrow),
+              iconSize: 32.0,
+              onPressed: () {
+                player.pause();
+              },
+            ),
+          ],
         ),
       ),
     );
