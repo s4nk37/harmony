@@ -12,12 +12,13 @@ class SongTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final data = Provider.of<Songs>(context);
+    final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
 
     return Container(
       width: double.infinity,
-      // height: 70,
-      // color: Colors.indigo.shade200,
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      margin: EdgeInsets.symmetric(
+          horizontal: width * 0.03, vertical: height * 0.005),
       child: Center(
         child: ListTile(
             title: Text(
@@ -31,7 +32,7 @@ class SongTile extends StatelessWidget {
                 ? Colors.indigoAccent.shade200
                 : Colors.amberAccent.shade200,
             shape: RoundedRectangleBorder(
-              // side: BorderSide(width: 0, color: Colors.black12),
+              side: const BorderSide(width: 5, color: Colors.white12),
               borderRadius: BorderRadius.circular(15),
             ),
             onTap: () {
