@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:harmony/song.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'homepage.dart';
 
@@ -16,10 +18,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-      title: "Harmony",
+    return ChangeNotifierProvider(
+      create: (ctx) => Songs(),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+        title: "Harmony",
+      ),
     );
   }
 }

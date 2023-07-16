@@ -11,7 +11,7 @@ class PageManager {
   );
   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
 
-  static const url =
+  var url =
       'https://firebasestorage.googleapis.com/v0/b/harmony-music-eb7ee.appspot.com/o/LarsM%20%26%20Side-B%20ft.%20Aloma%20Steele%20-%20Over%20%5BNCS%20Release%5D.mp3?alt=media&token=02108ed0-19b2-4beb-91af-0b4fdfe774b1';
 
   late AudioPlayer _audioPlayer;
@@ -67,12 +67,23 @@ class PageManager {
     });
   }
 
-  void play() {
+  void play([String urlSong = ""]) async {
+    url = urlSong;
+    await _audioPlayer.setUrl(urlSong);
+    print(url);
     _audioPlayer.play();
   }
 
   void pause() {
     _audioPlayer.pause();
+  }
+
+  void nextTen() {
+    _audioPlayer.seek(_audioPlayer.position + const Duration(seconds: 10));
+  }
+
+  void previousTen() {
+    _audioPlayer.seek(_audioPlayer.position - const Duration(seconds: 10));
   }
 
   void seek(Duration position) {
