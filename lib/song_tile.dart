@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'song.dart';
 
 class SongTile extends StatelessWidget {
   final int id;
@@ -11,7 +9,7 @@ class SongTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<Songs>(context);
+    // final data = Provider.of<Songs>(context);
     final height = MediaQuery.sizeOf(context).height;
     final width = MediaQuery.sizeOf(context).width;
 
@@ -30,7 +28,7 @@ class SongTile extends StatelessWidget {
             ),
             tileColor: id.isEven
                 ? Colors.indigoAccent.shade200
-                : Colors.amberAccent.shade200,
+                : Colors.blueAccent.shade100,
             shape: RoundedRectangleBorder(
               side: const BorderSide(width: 5, color: Colors.white12),
               borderRadius: BorderRadius.circular(15),

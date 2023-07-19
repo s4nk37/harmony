@@ -22,6 +22,10 @@ class _HomePageState extends State<HomePage> {
     _pageManager = PageManager();
   }
 
+  Future<List<Song>> _refreshSongs(BuildContext context) async {
+    return await Provider.of<Songs>(context, listen: false).fetchSongs();
+  }
+
   @override
   void dispose() {
     _pageManager.dispose();
@@ -30,7 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<Songs>(context);
     final height = MediaQuery.sizeOf(context).height;
     final width = MediaQuery.sizeOf(context).width;
 
@@ -41,13 +44,15 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Greetings Container
             Container(
               padding: EdgeInsets.symmetric(
                   horizontal: width * 0.04, vertical: height * 0.02),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
+              decoration: BoxDecoration(
+                color: constants.bgScaffold,
+                image: const DecorationImage(
                     image: AssetImage("assets/waves.png"),
-                    opacity: 0.4,
+                    opacity: 0.5,
                     fit: BoxFit.fill),
               ),
               child: Row(
@@ -63,29 +68,44 @@ class _HomePageState extends State<HomePage> {
                           letterSpacing: 0.7),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      data.fetchSongs();
-                    },
-                    icon: const Icon(Icons.refresh),
-                  ),
                 ],
               ),
             ),
+
+            // Songs List
             Expanded(
-              child: ListView.builder(
-                itemCount: data.songsList.length,
-                itemBuilder: (ctx, index) => SongTile(
-                    id: index,
-                    title: data.songsList[index].title,
-                    play: () {
-                      _pageManager.play(data.songsList[index].songUrl);
-                    }),
+              child: FutureBuilder(
+                future: _refreshSongs(context),
+                builder: (ctx, snapshot) =>
+                    snapshot.connectionState == ConnectionState.waiting
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : RefreshIndicator(
+                            onRefresh: () async {
+                              _refreshSongs(context);
+                            },
+                            child: Consumer<Songs>(
+                              builder: (ctx, songs, child) => ListView.builder(
+                                  itemCount: songs.songsList.length,
+                                  itemBuilder: (ctx1, i) {
+                                    return SongTile(
+                                        id: i,
+                                        title: songs.songsList[i].title,
+                                        play: () {
+                                          _pageManager
+                                              .play(songs.songsList[i].songUrl);
+                                        });
+                                  }),
+                            ),
+                          ),
               ),
             ),
           ],
         ),
       ),
+
+      // Music Controls
       bottomNavigationBar: Container(
         height: width > 500 && height < 500 ? height * 0.3 : height * 0.15,
         color: constants.bgMusicControls,

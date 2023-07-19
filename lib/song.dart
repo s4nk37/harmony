@@ -11,18 +11,19 @@ class Song {
 class Songs with ChangeNotifier {
   List<Song> _songsList = [];
 
-  List<Song> get songsList {
-    return [..._songsList];
-  }
-
-  Future<void> fetchSongs() async {
-    _songsList = [];
+  Future<List<Song>> fetchSongs() async {
+    List<Song> _songsList2 = [];
     final storageRef = FirebaseStorage.instance.ref().child("");
     final listResult = await storageRef.listAll();
     for (var item in listResult.items) {
-      _songsList
+      _songsList2
           .add(Song(title: item.name, songUrl: await item.getDownloadURL()));
-      notifyListeners();
     }
+    _songsList = _songsList2;
+    return _songsList;
+  }
+
+  List<Song> get songsList {
+    return [..._songsList];
   }
 }

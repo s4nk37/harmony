@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //Colors
 
 final Color bgScaffold = Colors.indigo.shade100;
-final Color bgAppBar = Colors.indigoAccent.shade100.withOpacity(0.1);
+final Color bgAppBar = Colors.indigo.shade100;
 final Color bgMusicControls = Colors.indigo.shade100.withOpacity(0.9);
 
 //AppBar
